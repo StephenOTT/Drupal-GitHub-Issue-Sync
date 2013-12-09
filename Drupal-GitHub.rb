@@ -10,6 +10,7 @@ class DrupalGitHubIssues
 		drupalData = self.get_Drupal_Issues(drupalProject)
 		gitHubData = self.get_GH_Issues(ghRepo)
 		self.determine_Drupal_GH_Changes(ghRepo, drupalData, gitHubData )
+		puts @ghClient.say("Drupal.org to GitHub.com Issue Sync")
 	end
 
 	def gh_Authenticate(username, password)
@@ -110,7 +111,6 @@ class DrupalGitHubIssues
 		@ghClient.add_labels_to_an_issue(repo, issueNumber, labels)
 		self.add_GH_Comment(repo, issueNumber, "Automated Message...<br>Labels have been updated to latest metadata from Drupal.org")
 	end
-
 
 	def get_Issue_Labels(repo, issueNumber)
 		labelsSawyer = @ghClient.labels_for_issue(repo.to_s, issueNumber.to_i)
