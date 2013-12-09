@@ -6,11 +6,25 @@ require 'open-uri'
 class DrupalGitHubIssues
 
 	def initialize(ghUsername, ghPassword, ghRepo, drupalProject)
+		
+
 		self.gh_Authenticate(ghUsername, ghPassword)
-		drupalData = self.get_Drupal_Issues(drupalProject)
-		gitHubData = self.get_GH_Issues(ghRepo)
-		self.determine_Drupal_GH_Changes(ghRepo, drupalData, gitHubData )
-		puts @ghClient.say("Drupal.org to GitHub.com Issue Sync")
+		if ghRepoExists?(ghRepo)
+			puts @ghClient.say("Drupal.org to GitHub.com Issue Sync")
+			drupalData = self.get_Drupal_Issues(drupalProject)
+			gitHubData = self.get_GH_Issues(ghRepo)
+			self.determine_Drupal_GH_Changes(ghRepo, drupalData, gitHubData )
+		else
+			puts "The GitHub Repo: #{ghRepo} does not exist."
+		end
+	end
+
+	def ghRepoExists?(repo)
+		if @ghClient.repository?(repo)
+			return true
+		else 
+			return false
+		end
 	end
 
 	def gh_Authenticate(username, password)
